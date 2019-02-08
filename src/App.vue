@@ -1,84 +1,60 @@
 <template>
-   <div class="row" style="padding: 20px">
-      <div>
-         <!-- the modal -->
-         <b-modal id="myModal" title="Image">
-            <img :src="srcImage" class="zoomodal img-fluid "  alt="">
-         </b-modal>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/62307/air-bubbles-diving-underwater-blow-62307.jpeg?auto=compress&cs=tinysrgb&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/62307/air-bubbles-diving-underwater-blow-62307.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" class="zoom img-fluid "  alt="">
+  <b-container fluid class="p-4">
+     <b-row>
+
+       <b-form-file v-model="file2" accept="image/*" class="mt-3" plain ref="myFiles" @change="onFileChange"></b-form-file>
+
+      <div class="mt-3">Selected file: {{file2 && file2.name}}</div>
+     </b-row>
+    <b-row>
+      <!-- the modal -->
+      <b-modal id="myModal" title="Image">
+        <img :src="srcImage" class="zoomodal img-fluid "  alt="">
+      </b-modal>
+      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb" v-for="item in items">
+         <a href="#" v-on:click="exibeImagem(item)" class="fancybox" rel="ligthbox">
+         <b-img thumbnail fluid :src="item" class="zoom img-fluid "  alt=""/>
          </a>
       </div>
-      <div v-b-modal.myModal  class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/38238/maldives-ile-beach-sun-38238.jpeg?auto=compress&cs=tinysrgb&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/38238/maldives-ile-beach-sun-38238.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" class="zoom img-fluid"  alt="">
-         </a>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/158827/field-corn-air-frisch-158827.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/158827/field-corn-air-frisch-158827.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="zoom img-fluid "  alt="">
-         </a>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/302804/pexels-photo-302804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/302804/pexels-photo-302804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="zoom img-fluid "  alt="">
-         </a>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/1038914/pexels-photo-1038914.jpeg?auto=compress&cs=tinysrgb&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/1038914/pexels-photo-1038914.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" class="zoom img-fluid "  alt="">
-         </a>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/414645/pexels-photo-414645.jpeg?auto=compress&cs=tinysrgb&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/414645/pexels-photo-414645.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" class="zoom img-fluid "  alt="">
-         </a>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/56005/fiji-beach-sand-palm-trees-56005.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/56005/fiji-beach-sand-palm-trees-56005.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="zoom img-fluid "  alt="">
-         </a>
-      </div>
-      <div v-b-modal.myModal class="col-lg-3 col-md-4 col-xs-6 thumb">
-         <a href="#" v-on:click="exibeImagem('https://images.pexels.com/photos/1038002/pexels-photo-1038002.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940')" class="fancybox" rel="ligthbox">
-         <img  src="https://images.pexels.com/photos/1038002/pexels-photo-1038002.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="zoom img-fluid "  alt="">
-         </a>
-      </div>
-   </div>
+    </b-row>
+  </b-container>
 </template>
 <script>
    export default {
      name: 'app',
      data () {
        return {
+         file2 : null,
+         files: [],
          dismissSecs: 10,
          dismissCountDown: 0,
          showDismissibleAlert: false,
-         srcImage: ''
+         srcImage: '',
+         items: []
        }
      },
      methods: {
-       countDownChanged (dismissCountDown) {
-         this.dismissCountDown = dismissCountDown
-       },
-       showAlert () {
-         this.dismissCountDown = this.dismissSecs
-       },
        exibeImagem(e) {
          this.srcImage = e;
-       }
+       },
+       onFileChange(e) {
+          
+          const file = e.target.files[0];
+
+          if(file!=null){
+            this.items = [];  
+            const url = URL.createObjectURL(file);
+            for(var i=0; i<=9; i++){
+              this.items.push(url);
+            }
+          }         
+      }
      }
    }
 </script>
 <style lang="scss">
    body {
-   background-color:#1d1d1d !important;
-   font-family: "Asap", sans-serif;
-   color:#989898;
-   margin:10px;
-   font-size:16px;
+   background-color:#f1f1f1 !important;
    }
    #demo {
    height:100%;
